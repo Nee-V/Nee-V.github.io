@@ -11674,166 +11674,6 @@ const Nest = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Touch; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-//**************************************************
-//**Work inspired by multiple jquery swipe plugins**
-//**Done by Yohai Ararat ***************************
-//**************************************************
-
-
-
-var Touch = {};
-
-var startPosX,
-    startPosY,
-    startTime,
-    elapsedTime,
-    isMoving = false;
-
-function onTouchEnd() {
-  //  alert(this);
-  this.removeEventListener('touchmove', onTouchMove);
-  this.removeEventListener('touchend', onTouchEnd);
-  isMoving = false;
-}
-
-function onTouchMove(e) {
-  if (__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.spotSwipe.preventDefault) { e.preventDefault(); }
-  if(isMoving) {
-    var x = e.touches[0].pageX;
-    var y = e.touches[0].pageY;
-    var dx = startPosX - x;
-    var dy = startPosY - y;
-    var dir;
-    elapsedTime = new Date().getTime() - startTime;
-    if(Math.abs(dx) >= __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.spotSwipe.moveThreshold && elapsedTime <= __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.spotSwipe.timeThreshold) {
-      dir = dx > 0 ? 'left' : 'right';
-    }
-    // else if(Math.abs(dy) >= $.spotSwipe.moveThreshold && elapsedTime <= $.spotSwipe.timeThreshold) {
-    //   dir = dy > 0 ? 'down' : 'up';
-    // }
-    if(dir) {
-      e.preventDefault();
-      onTouchEnd.call(this);
-      __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).trigger('swipe', dir).trigger(`swipe${dir}`);
-    }
-  }
-}
-
-function onTouchStart(e) {
-  if (e.touches.length == 1) {
-    startPosX = e.touches[0].pageX;
-    startPosY = e.touches[0].pageY;
-    isMoving = true;
-    startTime = new Date().getTime();
-    this.addEventListener('touchmove', onTouchMove, false);
-    this.addEventListener('touchend', onTouchEnd, false);
-  }
-}
-
-function init() {
-  this.addEventListener && this.addEventListener('touchstart', onTouchStart, false);
-}
-
-function teardown() {
-  this.removeEventListener('touchstart', onTouchStart);
-}
-
-class SpotSwipe {
-  constructor($) {
-    this.version = '1.0.0';
-    this.enabled = 'ontouchstart' in document.documentElement;
-    this.preventDefault = false;
-    this.moveThreshold = 75;
-    this.timeThreshold = 200;
-    this.$ = $;
-    this._init();
-  }
-
-  _init() {
-    var $ = this.$;
-    $.event.special.swipe = { setup: init };
-
-    $.each(['left', 'up', 'down', 'right'], function () {
-      $.event.special[`swipe${this}`] = { setup: function(){
-        $(this).on('swipe', $.noop);
-      } };
-    });
-  }
-}
-
-/****************************************************
- * As far as I can tell, both setupSpotSwipe and    *
- * setupTouchHandler should be idempotent,          *
- * because they directly replace functions &        *
- * values, and do not add event handlers directly.  *
- ****************************************************/
-
-Touch.setupSpotSwipe = function($) {
-  $.spotSwipe = new SpotSwipe($);
-};
-
-/****************************************************
- * Method for adding pseudo drag events to elements *
- ***************************************************/
-Touch.setupTouchHandler = function($) {
-  $.fn.addTouch = function(){
-    this.each(function(i,el){
-      $(el).bind('touchstart touchmove touchend touchcancel',function(){
-        //we pass the original event object because the jQuery event
-        //object is normalized to w3c specs and does not provide the TouchList
-        handleTouch(event);
-      });
-    });
-
-    var handleTouch = function(event){
-      var touches = event.changedTouches,
-          first = touches[0],
-          eventTypes = {
-            touchstart: 'mousedown',
-            touchmove: 'mousemove',
-            touchend: 'mouseup'
-          },
-          type = eventTypes[event.type],
-          simulatedEvent
-        ;
-
-      if('MouseEvent' in window && typeof window.MouseEvent === 'function') {
-        simulatedEvent = new window.MouseEvent(type, {
-          'bubbles': true,
-          'cancelable': true,
-          'screenX': first.screenX,
-          'screenY': first.screenY,
-          'clientX': first.clientX,
-          'clientY': first.clientY
-        });
-      } else {
-        simulatedEvent = document.createEvent('MouseEvent');
-        simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
-      }
-      first.target.dispatchEvent(simulatedEvent);
-    };
-  };
-};
-
-Touch.init = function($) {
-  if(typeof($.spotSwipe) === 'undefined') {
-    Touch.setupSpotSwipe($);
-    Touch.setupTouchHandler($);
-  }
-};
-
-
-
-
-/***/ }),
-/* 13 */,
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* WEBPACK VAR INJECTION */(function(global) {/*!
  * Vue.js v2.4.2
  * (c) 2014-2017 Evan You
@@ -21900,9 +21740,169 @@ Vue$3.compile = compileToFunctions;
 
 /* harmony default export */ __webpack_exports__["a"] = (Vue$3);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(187)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(191)))
 
 /***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Touch; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+//**************************************************
+//**Work inspired by multiple jquery swipe plugins**
+//**Done by Yohai Ararat ***************************
+//**************************************************
+
+
+
+var Touch = {};
+
+var startPosX,
+    startPosY,
+    startTime,
+    elapsedTime,
+    isMoving = false;
+
+function onTouchEnd() {
+  //  alert(this);
+  this.removeEventListener('touchmove', onTouchMove);
+  this.removeEventListener('touchend', onTouchEnd);
+  isMoving = false;
+}
+
+function onTouchMove(e) {
+  if (__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.spotSwipe.preventDefault) { e.preventDefault(); }
+  if(isMoving) {
+    var x = e.touches[0].pageX;
+    var y = e.touches[0].pageY;
+    var dx = startPosX - x;
+    var dy = startPosY - y;
+    var dir;
+    elapsedTime = new Date().getTime() - startTime;
+    if(Math.abs(dx) >= __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.spotSwipe.moveThreshold && elapsedTime <= __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.spotSwipe.timeThreshold) {
+      dir = dx > 0 ? 'left' : 'right';
+    }
+    // else if(Math.abs(dy) >= $.spotSwipe.moveThreshold && elapsedTime <= $.spotSwipe.timeThreshold) {
+    //   dir = dy > 0 ? 'down' : 'up';
+    // }
+    if(dir) {
+      e.preventDefault();
+      onTouchEnd.call(this);
+      __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).trigger('swipe', dir).trigger(`swipe${dir}`);
+    }
+  }
+}
+
+function onTouchStart(e) {
+  if (e.touches.length == 1) {
+    startPosX = e.touches[0].pageX;
+    startPosY = e.touches[0].pageY;
+    isMoving = true;
+    startTime = new Date().getTime();
+    this.addEventListener('touchmove', onTouchMove, false);
+    this.addEventListener('touchend', onTouchEnd, false);
+  }
+}
+
+function init() {
+  this.addEventListener && this.addEventListener('touchstart', onTouchStart, false);
+}
+
+function teardown() {
+  this.removeEventListener('touchstart', onTouchStart);
+}
+
+class SpotSwipe {
+  constructor($) {
+    this.version = '1.0.0';
+    this.enabled = 'ontouchstart' in document.documentElement;
+    this.preventDefault = false;
+    this.moveThreshold = 75;
+    this.timeThreshold = 200;
+    this.$ = $;
+    this._init();
+  }
+
+  _init() {
+    var $ = this.$;
+    $.event.special.swipe = { setup: init };
+
+    $.each(['left', 'up', 'down', 'right'], function () {
+      $.event.special[`swipe${this}`] = { setup: function(){
+        $(this).on('swipe', $.noop);
+      } };
+    });
+  }
+}
+
+/****************************************************
+ * As far as I can tell, both setupSpotSwipe and    *
+ * setupTouchHandler should be idempotent,          *
+ * because they directly replace functions &        *
+ * values, and do not add event handlers directly.  *
+ ****************************************************/
+
+Touch.setupSpotSwipe = function($) {
+  $.spotSwipe = new SpotSwipe($);
+};
+
+/****************************************************
+ * Method for adding pseudo drag events to elements *
+ ***************************************************/
+Touch.setupTouchHandler = function($) {
+  $.fn.addTouch = function(){
+    this.each(function(i,el){
+      $(el).bind('touchstart touchmove touchend touchcancel',function(){
+        //we pass the original event object because the jQuery event
+        //object is normalized to w3c specs and does not provide the TouchList
+        handleTouch(event);
+      });
+    });
+
+    var handleTouch = function(event){
+      var touches = event.changedTouches,
+          first = touches[0],
+          eventTypes = {
+            touchstart: 'mousedown',
+            touchmove: 'mousemove',
+            touchend: 'mouseup'
+          },
+          type = eventTypes[event.type],
+          simulatedEvent
+        ;
+
+      if('MouseEvent' in window && typeof window.MouseEvent === 'function') {
+        simulatedEvent = new window.MouseEvent(type, {
+          'bubbles': true,
+          'cancelable': true,
+          'screenX': first.screenX,
+          'screenY': first.screenY,
+          'clientX': first.clientX,
+          'clientY': first.clientY
+        });
+      } else {
+        simulatedEvent = document.createEvent('MouseEvent');
+        simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
+      }
+      first.target.dispatchEvent(simulatedEvent);
+    };
+  };
+};
+
+Touch.init = function($) {
+  if(typeof($.spotSwipe) === 'undefined') {
+    Touch.setupSpotSwipe($);
+    Touch.setupTouchHandler($);
+  }
+};
+
+
+
+
+/***/ }),
+/* 14 */,
 /* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -24564,14 +24564,15 @@ function Timer(elem, options, cb) {
 /* 40 */,
 /* 41 */,
 /* 42 */,
-/* 43 */
+/* 43 */,
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__js_foundation_core__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__js_foundation_core__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__js_foundation_util_core__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__js_foundation_util_box__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__js_foundation_util_imageLoader__ = __webpack_require__(10);
@@ -24580,29 +24581,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__js_foundation_util_motion__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__js_foundation_util_nest__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__js_foundation_util_timer__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__js_foundation_util_touch__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__js_foundation_util_touch__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__js_foundation_util_triggers__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__js_foundation_abide__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__js_foundation_abide__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__js_foundation_accordion__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__js_foundation_accordionMenu__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__js_foundation_drilldown__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__js_foundation_dropdown__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__js_foundation_dropdown__ = __webpack_require__(119);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__js_foundation_dropdownMenu__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__js_foundation_equalizer__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__js_foundation_interchange__ = __webpack_require__(116);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__js_foundation_magellan__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__js_foundation_offcanvas__ = __webpack_require__(118);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__js_foundation_orbit__ = __webpack_require__(119);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__js_foundation_responsiveMenu__ = __webpack_require__(121);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__js_foundation_responsiveToggle__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__js_foundation_reveal__ = __webpack_require__(123);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__js_foundation_slider__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__js_foundation_equalizer__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__js_foundation_interchange__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__js_foundation_magellan__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__js_foundation_offcanvas__ = __webpack_require__(123);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__js_foundation_orbit__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__js_foundation_responsiveMenu__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__js_foundation_responsiveToggle__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__js_foundation_reveal__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__js_foundation_slider__ = __webpack_require__(129);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__js_foundation_smoothScroll__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__js_foundation_sticky__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__js_foundation_sticky__ = __webpack_require__(130);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__js_foundation_tabs__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__js_foundation_toggler__ = __webpack_require__(126);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__js_foundation_tooltip__ = __webpack_require__(127);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__js_foundation_responsiveAccordionTabs__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__js_foundation_toggler__ = __webpack_require__(131);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__js_foundation_tooltip__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__js_foundation_responsiveAccordionTabs__ = __webpack_require__(125);
 
 
 
@@ -24709,7 +24710,7 @@ __WEBPACK_IMPORTED_MODULE_1__js_foundation_core__["a" /* Foundation */].plugin(_
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;;(function(root, factory) {
@@ -24835,821 +24836,73 @@ return MotionUI;
 
 
 /***/ }),
-/* 45 */,
-/* 46 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 46 */,
+/* 47 */
+/***/ (function(module, exports) {
 
-"use strict";
-/* unused harmony export Store */
-/* unused harmony export mapState */
-/* unused harmony export mapMutations */
-/* unused harmony export mapGetters */
-/* unused harmony export mapActions */
-/**
- * vuex v2.3.0
- * (c) 2017 Evan You
- * @license MIT
- */
-var applyMixin = function (Vue) {
-  var version = Number(Vue.version.split('.')[0]);
+exports.sync = function (store, router, options) {
+  var moduleName = (options || {}).moduleName || 'route'
 
-  if (version >= 2) {
-    var usesInit = Vue.config._lifecycleHooks.indexOf('init') > -1;
-    Vue.mixin(usesInit ? { init: vuexInit } : { beforeCreate: vuexInit });
-  } else {
-    // override init and inject vuex init procedure
-    // for 1.x backwards compatibility.
-    var _init = Vue.prototype._init;
-    Vue.prototype._init = function (options) {
-      if ( options === void 0 ) options = {};
-
-      options.init = options.init
-        ? [vuexInit].concat(options.init)
-        : vuexInit;
-      _init.call(this, options);
-    };
-  }
-
-  /**
-   * Vuex init hook, injected into each instances init hooks list.
-   */
-
-  function vuexInit () {
-    var options = this.$options;
-    // store injection
-    if (options.store) {
-      this.$store = options.store;
-    } else if (options.parent && options.parent.$store) {
-      this.$store = options.parent.$store;
+  store.registerModule(moduleName, {
+    namespaced: true,
+    state: cloneRoute(router.currentRoute),
+    mutations: {
+      'ROUTE_CHANGED': function (state, transition) {
+        store.state[moduleName] = cloneRoute(transition.to, transition.from)
+      }
     }
-  }
-};
+  })
 
-var devtoolHook =
-  typeof window !== 'undefined' &&
-  window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+  var isTimeTraveling = false
+  var currentPath
 
-function devtoolPlugin (store) {
-  if (!devtoolHook) { return }
-
-  store._devtoolHook = devtoolHook;
-
-  devtoolHook.emit('vuex:init', store);
-
-  devtoolHook.on('vuex:travel-to-state', function (targetState) {
-    store.replaceState(targetState);
-  });
-
-  store.subscribe(function (mutation, state) {
-    devtoolHook.emit('vuex:mutation', mutation, state);
-  });
-}
-
-/**
- * Get the first item that pass the test
- * by second argument function
- *
- * @param {Array} list
- * @param {Function} f
- * @return {*}
- */
-/**
- * Deep copy the given object considering circular structure.
- * This function caches all nested objects and its copies.
- * If it detects circular structure, use cached copy to avoid infinite loop.
- *
- * @param {*} obj
- * @param {Array<Object>} cache
- * @return {*}
- */
-
-
-/**
- * forEach for object
- */
-function forEachValue (obj, fn) {
-  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
-}
-
-function isObject (obj) {
-  return obj !== null && typeof obj === 'object'
-}
-
-function isPromise (val) {
-  return val && typeof val.then === 'function'
-}
-
-function assert (condition, msg) {
-  if (!condition) { throw new Error(("[vuex] " + msg)) }
-}
-
-var Module = function Module (rawModule, runtime) {
-  this.runtime = runtime;
-  this._children = Object.create(null);
-  this._rawModule = rawModule;
-  var rawState = rawModule.state;
-  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
-};
-
-var prototypeAccessors$1 = { namespaced: {} };
-
-prototypeAccessors$1.namespaced.get = function () {
-  return !!this._rawModule.namespaced
-};
-
-Module.prototype.addChild = function addChild (key, module) {
-  this._children[key] = module;
-};
-
-Module.prototype.removeChild = function removeChild (key) {
-  delete this._children[key];
-};
-
-Module.prototype.getChild = function getChild (key) {
-  return this._children[key]
-};
-
-Module.prototype.update = function update (rawModule) {
-  this._rawModule.namespaced = rawModule.namespaced;
-  if (rawModule.actions) {
-    this._rawModule.actions = rawModule.actions;
-  }
-  if (rawModule.mutations) {
-    this._rawModule.mutations = rawModule.mutations;
-  }
-  if (rawModule.getters) {
-    this._rawModule.getters = rawModule.getters;
-  }
-};
-
-Module.prototype.forEachChild = function forEachChild (fn) {
-  forEachValue(this._children, fn);
-};
-
-Module.prototype.forEachGetter = function forEachGetter (fn) {
-  if (this._rawModule.getters) {
-    forEachValue(this._rawModule.getters, fn);
-  }
-};
-
-Module.prototype.forEachAction = function forEachAction (fn) {
-  if (this._rawModule.actions) {
-    forEachValue(this._rawModule.actions, fn);
-  }
-};
-
-Module.prototype.forEachMutation = function forEachMutation (fn) {
-  if (this._rawModule.mutations) {
-    forEachValue(this._rawModule.mutations, fn);
-  }
-};
-
-Object.defineProperties( Module.prototype, prototypeAccessors$1 );
-
-var ModuleCollection = function ModuleCollection (rawRootModule) {
-  var this$1 = this;
-
-  // register root module (Vuex.Store options)
-  this.root = new Module(rawRootModule, false);
-
-  // register all nested modules
-  if (rawRootModule.modules) {
-    forEachValue(rawRootModule.modules, function (rawModule, key) {
-      this$1.register([key], rawModule, false);
-    });
-  }
-};
-
-ModuleCollection.prototype.get = function get (path) {
-  return path.reduce(function (module, key) {
-    return module.getChild(key)
-  }, this.root)
-};
-
-ModuleCollection.prototype.getNamespace = function getNamespace (path) {
-  var module = this.root;
-  return path.reduce(function (namespace, key) {
-    module = module.getChild(key);
-    return namespace + (module.namespaced ? key + '/' : '')
-  }, '')
-};
-
-ModuleCollection.prototype.update = function update$1 (rawRootModule) {
-  update(this.root, rawRootModule);
-};
-
-ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
-    var this$1 = this;
-    if ( runtime === void 0 ) runtime = true;
-
-  var parent = this.get(path.slice(0, -1));
-  var newModule = new Module(rawModule, runtime);
-  parent.addChild(path[path.length - 1], newModule);
-
-  // register nested modules
-  if (rawModule.modules) {
-    forEachValue(rawModule.modules, function (rawChildModule, key) {
-      this$1.register(path.concat(key), rawChildModule, runtime);
-    });
-  }
-};
-
-ModuleCollection.prototype.unregister = function unregister (path) {
-  var parent = this.get(path.slice(0, -1));
-  var key = path[path.length - 1];
-  if (!parent.getChild(key).runtime) { return }
-
-  parent.removeChild(key);
-};
-
-function update (targetModule, newModule) {
-  // update target module
-  targetModule.update(newModule);
-
-  // update nested modules
-  if (newModule.modules) {
-    for (var key in newModule.modules) {
-      if (!targetModule.getChild(key)) {
-        console.warn(
-          "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
-          'manual reload is needed'
-        );
+  // sync router on store change
+  store.watch(
+    function (state) { return state[moduleName] },
+    function (route) {
+      if (route.fullPath === currentPath) {
         return
       }
-      update(targetModule.getChild(key), newModule.modules[key]);
-    }
-  }
-}
-
-var Vue; // bind on install
-
-var Store = function Store (options) {
-  var this$1 = this;
-  if ( options === void 0 ) options = {};
-
-  assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
-  assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
-
-  var state = options.state; if ( state === void 0 ) state = {};
-  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
-  var strict = options.strict; if ( strict === void 0 ) strict = false;
-
-  // store internal state
-  this._committing = false;
-  this._actions = Object.create(null);
-  this._mutations = Object.create(null);
-  this._wrappedGetters = Object.create(null);
-  this._modules = new ModuleCollection(options);
-  this._modulesNamespaceMap = Object.create(null);
-  this._subscribers = [];
-  this._watcherVM = new Vue();
-
-  // bind commit and dispatch to self
-  var store = this;
-  var ref = this;
-  var dispatch = ref.dispatch;
-  var commit = ref.commit;
-  this.dispatch = function boundDispatch (type, payload) {
-    return dispatch.call(store, type, payload)
-  };
-  this.commit = function boundCommit (type, payload, options) {
-    return commit.call(store, type, payload, options)
-  };
-
-  // strict mode
-  this.strict = strict;
-
-  // init root module.
-  // this also recursively registers all sub-modules
-  // and collects all module getters inside this._wrappedGetters
-  installModule(this, state, [], this._modules.root);
-
-  // initialize the store vm, which is responsible for the reactivity
-  // (also registers _wrappedGetters as computed properties)
-  resetStoreVM(this, state);
-
-  // apply plugins
-  plugins.concat(devtoolPlugin).forEach(function (plugin) { return plugin(this$1); });
-};
-
-var prototypeAccessors = { state: {} };
-
-prototypeAccessors.state.get = function () {
-  return this._vm._data.$$state
-};
-
-prototypeAccessors.state.set = function (v) {
-  assert(false, "Use store.replaceState() to explicit replace store state.");
-};
-
-Store.prototype.commit = function commit (_type, _payload, _options) {
-    var this$1 = this;
-
-  // check object-style commit
-  var ref = unifyObjectStyle(_type, _payload, _options);
-    var type = ref.type;
-    var payload = ref.payload;
-    var options = ref.options;
-
-  var mutation = { type: type, payload: payload };
-  var entry = this._mutations[type];
-  if (!entry) {
-    console.error(("[vuex] unknown mutation type: " + type));
-    return
-  }
-  this._withCommit(function () {
-    entry.forEach(function commitIterator (handler) {
-      handler(payload);
-    });
-  });
-  this._subscribers.forEach(function (sub) { return sub(mutation, this$1.state); });
-
-  if (options && options.silent) {
-    console.warn(
-      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
-      'Use the filter functionality in the vue-devtools'
-    );
-  }
-};
-
-Store.prototype.dispatch = function dispatch (_type, _payload) {
-  // check object-style dispatch
-  var ref = unifyObjectStyle(_type, _payload);
-    var type = ref.type;
-    var payload = ref.payload;
-
-  var entry = this._actions[type];
-  if (!entry) {
-    console.error(("[vuex] unknown action type: " + type));
-    return
-  }
-  return entry.length > 1
-    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
-    : entry[0](payload)
-};
-
-Store.prototype.subscribe = function subscribe (fn) {
-  var subs = this._subscribers;
-  if (subs.indexOf(fn) < 0) {
-    subs.push(fn);
-  }
-  return function () {
-    var i = subs.indexOf(fn);
-    if (i > -1) {
-      subs.splice(i, 1);
-    }
-  }
-};
-
-Store.prototype.watch = function watch (getter, cb, options) {
-    var this$1 = this;
-
-  assert(typeof getter === 'function', "store.watch only accepts a function.");
-  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
-};
-
-Store.prototype.replaceState = function replaceState (state) {
-    var this$1 = this;
-
-  this._withCommit(function () {
-    this$1._vm._data.$$state = state;
-  });
-};
-
-Store.prototype.registerModule = function registerModule (path, rawModule) {
-  if (typeof path === 'string') { path = [path]; }
-  assert(Array.isArray(path), "module path must be a string or an Array.");
-  this._modules.register(path, rawModule);
-  installModule(this, this.state, path, this._modules.get(path));
-  // reset store to update getters...
-  resetStoreVM(this, this.state);
-};
-
-Store.prototype.unregisterModule = function unregisterModule (path) {
-    var this$1 = this;
-
-  if (typeof path === 'string') { path = [path]; }
-  assert(Array.isArray(path), "module path must be a string or an Array.");
-  this._modules.unregister(path);
-  this._withCommit(function () {
-    var parentState = getNestedState(this$1.state, path.slice(0, -1));
-    Vue.delete(parentState, path[path.length - 1]);
-  });
-  resetStore(this);
-};
-
-Store.prototype.hotUpdate = function hotUpdate (newOptions) {
-  this._modules.update(newOptions);
-  resetStore(this, true);
-};
-
-Store.prototype._withCommit = function _withCommit (fn) {
-  var committing = this._committing;
-  this._committing = true;
-  fn();
-  this._committing = committing;
-};
-
-Object.defineProperties( Store.prototype, prototypeAccessors );
-
-function resetStore (store, hot) {
-  store._actions = Object.create(null);
-  store._mutations = Object.create(null);
-  store._wrappedGetters = Object.create(null);
-  store._modulesNamespaceMap = Object.create(null);
-  var state = store.state;
-  // init all modules
-  installModule(store, state, [], store._modules.root, true);
-  // reset vm
-  resetStoreVM(store, state, hot);
-}
-
-function resetStoreVM (store, state, hot) {
-  var oldVm = store._vm;
-
-  // bind store public getters
-  store.getters = {};
-  var wrappedGetters = store._wrappedGetters;
-  var computed = {};
-  forEachValue(wrappedGetters, function (fn, key) {
-    // use computed to leverage its lazy-caching mechanism
-    computed[key] = function () { return fn(store); };
-    Object.defineProperty(store.getters, key, {
-      get: function () { return store._vm[key]; },
-      enumerable: true // for local getters
-    });
-  });
-
-  // use a Vue instance to store the state tree
-  // suppress warnings just in case the user has added
-  // some funky global mixins
-  var silent = Vue.config.silent;
-  Vue.config.silent = true;
-  store._vm = new Vue({
-    data: {
-      $$state: state
+      isTimeTraveling = true
+      var methodToUse = currentPath == null
+        ? 'replace'
+        : 'push'
+      currentPath = route.fullPath
+      router[methodToUse](route)
     },
-    computed: computed
-  });
-  Vue.config.silent = silent;
+    { sync: true }
+  )
 
-  // enable strict mode for new vm
-  if (store.strict) {
-    enableStrictMode(store);
-  }
-
-  if (oldVm) {
-    if (hot) {
-      // dispatch changes in all subscribed watchers
-      // to force getter re-evaluation for hot reloading.
-      store._withCommit(function () {
-        oldVm._data.$$state = null;
-      });
+  // sync store on router navigation
+  router.afterEach(function (to, from) {
+    if (isTimeTraveling) {
+      isTimeTraveling = false
+      return
     }
-    Vue.nextTick(function () { return oldVm.$destroy(); });
+    currentPath = to.fullPath
+    store.commit(moduleName + '/ROUTE_CHANGED', { to: to, from: from })
+  })
+}
+
+function cloneRoute (to, from) {
+  var clone = {
+    name: to.name,
+    path: to.path,
+    hash: to.hash,
+    query: to.query,
+    params: to.params,
+    fullPath: to.fullPath,
+    meta: to.meta
   }
-}
-
-function installModule (store, rootState, path, module, hot) {
-  var isRoot = !path.length;
-  var namespace = store._modules.getNamespace(path);
-
-  // register in namespace map
-  if (module.namespaced) {
-    store._modulesNamespaceMap[namespace] = module;
+  if (from) {
+    clone.from = cloneRoute(from)
   }
-
-  // set state
-  if (!isRoot && !hot) {
-    var parentState = getNestedState(rootState, path.slice(0, -1));
-    var moduleName = path[path.length - 1];
-    store._withCommit(function () {
-      Vue.set(parentState, moduleName, module.state);
-    });
-  }
-
-  var local = module.context = makeLocalContext(store, namespace, path);
-
-  module.forEachMutation(function (mutation, key) {
-    var namespacedType = namespace + key;
-    registerMutation(store, namespacedType, mutation, local);
-  });
-
-  module.forEachAction(function (action, key) {
-    var namespacedType = namespace + key;
-    registerAction(store, namespacedType, action, local);
-  });
-
-  module.forEachGetter(function (getter, key) {
-    var namespacedType = namespace + key;
-    registerGetter(store, namespacedType, getter, local);
-  });
-
-  module.forEachChild(function (child, key) {
-    installModule(store, rootState, path.concat(key), child, hot);
-  });
+  return Object.freeze(clone)
 }
-
-/**
- * make localized dispatch, commit, getters and state
- * if there is no namespace, just use root ones
- */
-function makeLocalContext (store, namespace, path) {
-  var noNamespace = namespace === '';
-
-  var local = {
-    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
-      var args = unifyObjectStyle(_type, _payload, _options);
-      var payload = args.payload;
-      var options = args.options;
-      var type = args.type;
-
-      if (!options || !options.root) {
-        type = namespace + type;
-        if (!store._actions[type]) {
-          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
-          return
-        }
-      }
-
-      return store.dispatch(type, payload)
-    },
-
-    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
-      var args = unifyObjectStyle(_type, _payload, _options);
-      var payload = args.payload;
-      var options = args.options;
-      var type = args.type;
-
-      if (!options || !options.root) {
-        type = namespace + type;
-        if (!store._mutations[type]) {
-          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
-          return
-        }
-      }
-
-      store.commit(type, payload, options);
-    }
-  };
-
-  // getters and state object must be gotten lazily
-  // because they will be changed by vm update
-  Object.defineProperties(local, {
-    getters: {
-      get: noNamespace
-        ? function () { return store.getters; }
-        : function () { return makeLocalGetters(store, namespace); }
-    },
-    state: {
-      get: function () { return getNestedState(store.state, path); }
-    }
-  });
-
-  return local
-}
-
-function makeLocalGetters (store, namespace) {
-  var gettersProxy = {};
-
-  var splitPos = namespace.length;
-  Object.keys(store.getters).forEach(function (type) {
-    // skip if the target getter is not match this namespace
-    if (type.slice(0, splitPos) !== namespace) { return }
-
-    // extract local getter type
-    var localType = type.slice(splitPos);
-
-    // Add a port to the getters proxy.
-    // Define as getter property because
-    // we do not want to evaluate the getters in this time.
-    Object.defineProperty(gettersProxy, localType, {
-      get: function () { return store.getters[type]; },
-      enumerable: true
-    });
-  });
-
-  return gettersProxy
-}
-
-function registerMutation (store, type, handler, local) {
-  var entry = store._mutations[type] || (store._mutations[type] = []);
-  entry.push(function wrappedMutationHandler (payload) {
-    handler(local.state, payload);
-  });
-}
-
-function registerAction (store, type, handler, local) {
-  var entry = store._actions[type] || (store._actions[type] = []);
-  entry.push(function wrappedActionHandler (payload, cb) {
-    var res = handler({
-      dispatch: local.dispatch,
-      commit: local.commit,
-      getters: local.getters,
-      state: local.state,
-      rootGetters: store.getters,
-      rootState: store.state
-    }, payload, cb);
-    if (!isPromise(res)) {
-      res = Promise.resolve(res);
-    }
-    if (store._devtoolHook) {
-      return res.catch(function (err) {
-        store._devtoolHook.emit('vuex:error', err);
-        throw err
-      })
-    } else {
-      return res
-    }
-  });
-}
-
-function registerGetter (store, type, rawGetter, local) {
-  if (store._wrappedGetters[type]) {
-    console.error(("[vuex] duplicate getter key: " + type));
-    return
-  }
-  store._wrappedGetters[type] = function wrappedGetter (store) {
-    return rawGetter(
-      local.state, // local state
-      local.getters, // local getters
-      store.state, // root state
-      store.getters // root getters
-    )
-  };
-}
-
-function enableStrictMode (store) {
-  store._vm.$watch(function () { return this._data.$$state }, function () {
-    assert(store._committing, "Do not mutate vuex store state outside mutation handlers.");
-  }, { deep: true, sync: true });
-}
-
-function getNestedState (state, path) {
-  return path.length
-    ? path.reduce(function (state, key) { return state[key]; }, state)
-    : state
-}
-
-function unifyObjectStyle (type, payload, options) {
-  if (isObject(type) && type.type) {
-    options = payload;
-    payload = type;
-    type = type.type;
-  }
-
-  assert(typeof type === 'string', ("Expects string as the type, but found " + (typeof type) + "."));
-
-  return { type: type, payload: payload, options: options }
-}
-
-function install (_Vue) {
-  if (Vue) {
-    console.error(
-      '[vuex] already installed. Vue.use(Vuex) should be called only once.'
-    );
-    return
-  }
-  Vue = _Vue;
-  applyMixin(Vue);
-}
-
-// auto install in dist mode
-if (typeof window !== 'undefined' && window.Vue) {
-  install(window.Vue);
-}
-
-var mapState = normalizeNamespace(function (namespace, states) {
-  var res = {};
-  normalizeMap(states).forEach(function (ref) {
-    var key = ref.key;
-    var val = ref.val;
-
-    res[key] = function mappedState () {
-      var state = this.$store.state;
-      var getters = this.$store.getters;
-      if (namespace) {
-        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
-        if (!module) {
-          return
-        }
-        state = module.context.state;
-        getters = module.context.getters;
-      }
-      return typeof val === 'function'
-        ? val.call(this, state, getters)
-        : state[val]
-    };
-    // mark vuex getter for devtools
-    res[key].vuex = true;
-  });
-  return res
-});
-
-var mapMutations = normalizeNamespace(function (namespace, mutations) {
-  var res = {};
-  normalizeMap(mutations).forEach(function (ref) {
-    var key = ref.key;
-    var val = ref.val;
-
-    val = namespace + val;
-    res[key] = function mappedMutation () {
-      var args = [], len = arguments.length;
-      while ( len-- ) args[ len ] = arguments[ len ];
-
-      if (namespace && !getModuleByNamespace(this.$store, 'mapMutations', namespace)) {
-        return
-      }
-      return this.$store.commit.apply(this.$store, [val].concat(args))
-    };
-  });
-  return res
-});
-
-var mapGetters = normalizeNamespace(function (namespace, getters) {
-  var res = {};
-  normalizeMap(getters).forEach(function (ref) {
-    var key = ref.key;
-    var val = ref.val;
-
-    val = namespace + val;
-    res[key] = function mappedGetter () {
-      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
-        return
-      }
-      if (!(val in this.$store.getters)) {
-        console.error(("[vuex] unknown getter: " + val));
-        return
-      }
-      return this.$store.getters[val]
-    };
-    // mark vuex getter for devtools
-    res[key].vuex = true;
-  });
-  return res
-});
-
-var mapActions = normalizeNamespace(function (namespace, actions) {
-  var res = {};
-  normalizeMap(actions).forEach(function (ref) {
-    var key = ref.key;
-    var val = ref.val;
-
-    val = namespace + val;
-    res[key] = function mappedAction () {
-      var args = [], len = arguments.length;
-      while ( len-- ) args[ len ] = arguments[ len ];
-
-      if (namespace && !getModuleByNamespace(this.$store, 'mapActions', namespace)) {
-        return
-      }
-      return this.$store.dispatch.apply(this.$store, [val].concat(args))
-    };
-  });
-  return res
-});
-
-function normalizeMap (map) {
-  return Array.isArray(map)
-    ? map.map(function (key) { return ({ key: key, val: key }); })
-    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
-}
-
-function normalizeNamespace (fn) {
-  return function (namespace, map) {
-    if (typeof namespace !== 'string') {
-      map = namespace;
-      namespace = '';
-    } else if (namespace.charAt(namespace.length - 1) !== '/') {
-      namespace += '/';
-    }
-    return fn(namespace, map)
-  }
-}
-
-function getModuleByNamespace (store, helper, namespace) {
-  var module = store._modulesNamespaceMap[namespace];
-  if (!module) {
-    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
-  }
-  return module
-}
-
-var index_esm = {
-  Store: Store,
-  install: install,
-  version: '2.3.0',
-  mapState: mapState,
-  mapMutations: mapMutations,
-  mapGetters: mapGetters,
-  mapActions: mapActions
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (index_esm);
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -26034,8 +25287,427 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
-/* 48 */,
-/* 49 */,
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function (global, factory) {
+	 true ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.accounting = global.accounting || {})));
+}(this, function (exports) { 'use strict';
+
+	function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports), module.exports; }
+
+	/**
+	 * The library's settings configuration object.
+	 *
+	 * Contains default parameters for currency and number formatting
+	 */
+	var settings = {
+	  symbol: '$', // default currency symbol is '$'
+	  format: '%s%v', // controls output: %s = symbol, %v = value (can be object, see docs)
+	  decimal: '.', // decimal point separator
+	  thousand: ',', // thousands separator
+	  precision: 2, // decimal places
+	  grouping: 3, // digit grouping (not implemented yet)
+	  stripZeros: false, // strip insignificant zeros from decimal part
+	  fallback: 0 // value returned on unformat() failure
+	};
+
+	/**
+	 * Takes a string/array of strings, removes all formatting/cruft and returns the raw float value
+	 * Alias: `accounting.parse(string)`
+	 *
+	 * Decimal must be included in the regular expression to match floats (defaults to
+	 * accounting.settings.decimal), so if the number uses a non-standard decimal
+	 * separator, provide it as the second argument.
+	 *
+	 * Also matches bracketed negatives (eg. '$ (1.99)' => -1.99)
+	 *
+	 * Doesn't throw any errors (`NaN`s become 0) but this may change in future
+	 *
+	 * ```js
+	 *  accounting.unformat("£ 12,345,678.90 GBP"); // 12345678.9
+	 * ```
+	 *
+	 * @method unformat
+	 * @for accounting
+	 * @param {String|Array<String>} value The string or array of strings containing the number/s to parse.
+	 * @param {Number}               decimal Number of decimal digits of the resultant number
+	 * @return {Float} The parsed number
+	 */
+	function unformat(value) {
+	  var decimal = arguments.length <= 1 || arguments[1] === undefined ? settings.decimal : arguments[1];
+	  var fallback = arguments.length <= 2 || arguments[2] === undefined ? settings.fallback : arguments[2];
+
+	  // Recursively unformat arrays:
+	  if (Array.isArray(value)) {
+	    return value.map(function (val) {
+	      return unformat(val, decimal, fallback);
+	    });
+	  }
+
+	  // Return the value as-is if it's already a number:
+	  if (typeof value === 'number') return value;
+
+	  // Build regex to strip out everything except digits, decimal point and minus sign:
+	  var regex = new RegExp('[^0-9-(-)-' + decimal + ']', ['g']);
+	  var unformattedValueString = ('' + value).replace(regex, '') // strip out any cruft
+	  .replace(decimal, '.') // make sure decimal point is standard
+	  .replace(/\(([-]*\d*[^)]?\d+)\)/g, '-$1') // replace bracketed values with negatives
+	  .replace(/\((.*)\)/, ''); // remove any brackets that do not have numeric value
+
+	  /**
+	   * Handling -ve number and bracket, eg.
+	   * (-100) = 100, -(100) = 100, --100 = 100
+	   */
+	  var negative = (unformattedValueString.match(/-/g) || 2).length % 2,
+	      absUnformatted = parseFloat(unformattedValueString.replace(/-/g, '')),
+	      unformatted = absUnformatted * (negative ? -1 : 1);
+
+	  // This will fail silently which may cause trouble, let's wait and see:
+	  return !isNaN(unformatted) ? unformatted : fallback;
+	}
+
+	/**
+	 * Check and normalise the value of precision (must be positive integer)
+	 */
+	function _checkPrecision(val, base) {
+	  val = Math.round(Math.abs(val));
+	  return isNaN(val) ? base : val;
+	}
+
+	/**
+	 * Implementation of toFixed() that treats floats more like decimals
+	 *
+	 * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
+	 * problems for accounting- and finance-related software.
+	 *
+	 * ```js
+	 *  (0.615).toFixed(2);           // "0.61" (native toFixed has rounding issues)
+	 *  accounting.toFixed(0.615, 2); // "0.62"
+	 * ```
+	 *
+	 * @method toFixed
+	 * @for accounting
+	 * @param {Float}   value         The float to be treated as a decimal number.
+	 * @param {Number} [precision=2] The number of decimal digits to keep.
+	 * @return {String} The given number transformed into a string with the given precission
+	 */
+	function toFixed(value, precision) {
+	  precision = _checkPrecision(precision, settings.precision);
+	  var power = Math.pow(10, precision);
+
+	  // Multiply up by precision, round accurately, then divide and use native toFixed():
+	  return (Math.round((value + 1e-8) * power) / power).toFixed(precision);
+	}
+
+	var index = __commonjs(function (module) {
+	/* eslint-disable no-unused-vars */
+	'use strict';
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
+	});
+
+	var objectAssign = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
+
+	function _stripInsignificantZeros(str, decimal) {
+	  var parts = str.split(decimal);
+	  var integerPart = parts[0];
+	  var decimalPart = parts[1].replace(/0+$/, '');
+
+	  if (decimalPart.length > 0) {
+	    return integerPart + decimal + decimalPart;
+	  }
+
+	  return integerPart;
+	}
+
+	/**
+	 * Format a number, with comma-separated thousands and custom precision/decimal places
+	 * Alias: `accounting.format()`
+	 *
+	 * Localise by overriding the precision and thousand / decimal separators
+	 *
+	 * ```js
+	 * accounting.formatNumber(5318008);              // 5,318,008
+	 * accounting.formatNumber(9876543.21, { precision: 3, thousand: " " }); // 9 876 543.210
+	 * ```
+	 *
+	 * @method formatNumber
+	 * @for accounting
+	 * @param {Number}        number The number to be formatted.
+	 * @param {Object}        [opts={}] Object containing all the options of the method.
+	 * @return {String} The given number properly formatted.
+	  */
+	function formatNumber(number) {
+	  var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	  // Resursively format arrays:
+	  if (Array.isArray(number)) {
+	    return number.map(function (val) {
+	      return formatNumber(val, opts);
+	    });
+	  }
+
+	  // Build options object from second param (if object) or all params, extending defaults:
+	  opts = objectAssign({}, settings, opts);
+
+	  // Do some calc:
+	  var negative = number < 0 ? '-' : '';
+	  var base = parseInt(toFixed(Math.abs(number), opts.precision), 10) + '';
+	  var mod = base.length > 3 ? base.length % 3 : 0;
+
+	  // Format the number:
+	  var formatted = negative + (mod ? base.substr(0, mod) + opts.thousand : '') + base.substr(mod).replace(/(\d{3})(?=\d)/g, '$1' + opts.thousand) + (opts.precision > 0 ? opts.decimal + toFixed(Math.abs(number), opts.precision).split('.')[1] : '');
+
+	  return opts.stripZeros ? _stripInsignificantZeros(formatted, opts.decimal) : formatted;
+	}
+
+	var index$1 = __commonjs(function (module) {
+	'use strict';
+
+	var strValue = String.prototype.valueOf;
+	var tryStringObject = function tryStringObject(value) {
+		try {
+			strValue.call(value);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	};
+	var toStr = Object.prototype.toString;
+	var strClass = '[object String]';
+	var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
+
+	module.exports = function isString(value) {
+		if (typeof value === 'string') { return true; }
+		if (typeof value !== 'object') { return false; }
+		return hasToStringTag ? tryStringObject(value) : toStr.call(value) === strClass;
+	};
+	});
+
+	var isString = (index$1 && typeof index$1 === 'object' && 'default' in index$1 ? index$1['default'] : index$1);
+
+	/**
+	 * Parses a format string or object and returns format obj for use in rendering
+	 *
+	 * `format` is either a string with the default (positive) format, or object
+	 * containing `pos` (required), `neg` and `zero` values
+	 *
+	 * Either string or format.pos must contain "%v" (value) to be valid
+	 *
+	 * @method _checkCurrencyFormat
+	 * @for accounting
+	 * @param {String}        [format="%s%v"] String with the format to apply, where %s is the currency symbol and %v is the value.
+	 * @return {Object} object represnting format (with pos, neg and zero attributes)
+	 */
+	function _checkCurrencyFormat(format) {
+	  // Format should be a string, in which case `value` ('%v') must be present:
+	  if (isString(format) && format.match('%v')) {
+	    // Create and return positive, negative and zero formats:
+	    return {
+	      pos: format,
+	      neg: format.replace('-', '').replace('%v', '-%v'),
+	      zero: format
+	    };
+	  }
+
+	  // Otherwise, assume format was fine:
+	  return format;
+	}
+
+	/**
+	 * Format a number into currency
+	 *
+	 * Usage: accounting.formatMoney(number, symbol, precision, thousandsSep, decimalSep, format)
+	 * defaults: (0, '$', 2, ',', '.', '%s%v')
+	 *
+	 * Localise by overriding the symbol, precision, thousand / decimal separators and format
+	 *
+	 * ```js
+	 * // Default usage:
+	 * accounting.formatMoney(12345678); // $12,345,678.00
+	 *
+	 * // European formatting (custom symbol and separators), can also use options object as second parameter:
+	 * accounting.formatMoney(4999.99, { symbol: "€", precision: 2, thousand: ".", decimal: "," }); // €4.999,99
+	 *
+	 * // Negative values can be formatted nicely:
+	 * accounting.formatMoney(-500000, { symbol: "£ ", precision: 0 }); // £ -500,000
+	 *
+	 * // Simple `format` string allows control of symbol position (%v = value, %s = symbol):
+	 * accounting.formatMoney(5318008, { symbol: "GBP",  format: "%v %s" }); // 5,318,008.00 GBP
+	 * ```
+	 *
+	 * @method formatMoney
+	 * @for accounting
+	 * @param {Number}        number Number to be formatted.
+	 * @param {Object}        [opts={}] Object containing all the options of the method.
+	 * @return {String} The given number properly formatted as money.
+	 */
+	function formatMoney(number) {
+	  var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	  // Resursively format arrays:
+	  if (Array.isArray(number)) {
+	    return number.map(function (val) {
+	      return formatMoney(val, opts);
+	    });
+	  }
+
+	  // Build options object from second param (if object) or all params, extending defaults:
+	  opts = objectAssign({}, settings, opts);
+
+	  // Check format (returns object with pos, neg and zero):
+	  var formats = _checkCurrencyFormat(opts.format);
+
+	  // Choose which format to use for this value:
+	  var useFormat = undefined;
+
+	  if (number > 0) {
+	    useFormat = formats.pos;
+	  } else if (number < 0) {
+	    useFormat = formats.neg;
+	  } else {
+	    useFormat = formats.zero;
+	  }
+
+	  // Return with currency symbol added:
+	  return useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(number), opts));
+	}
+
+	/**
+	 * Format a list of numbers into an accounting column, padding with whitespace
+	 * to line up currency symbols, thousand separators and decimals places
+	 *
+	 * List should be an array of numbers
+	 *
+	 * Returns array of accouting-formatted number strings of same length
+	 *
+	 * NB: `white-space:pre` CSS rule is required on the list container to prevent
+	 * browsers from collapsing the whitespace in the output strings.
+	 *
+	 * ```js
+	 * accounting.formatColumn([123.5, 3456.49, 777888.99, 12345678, -5432], { symbol: "$ " });
+	 * ```
+	 *
+	 * @method formatColumn
+	 * @for accounting
+	 * @param {Array<Number>} list An array of numbers to format
+	 * @param {Object}        [opts={}] Object containing all the options of the method.
+	 * @param {Object|String} [symbol="$"] String with the currency symbol. For conveniency if can be an object containing all the options of the method.
+	 * @param {Integer}       [precision=2] Number of decimal digits
+	 * @param {String}        [thousand=','] String with the thousands separator.
+	 * @param {String}        [decimal="."] String with the decimal separator.
+	 * @param {String}        [format="%s%v"] String with the format to apply, where %s is the currency symbol and %v is the value.
+	 * @return {Array<String>} array of accouting-formatted number strings of same length
+	 */
+	function formatColumn(list) {
+	  var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	  if (!list) return [];
+
+	  // Build options object from second param (if object) or all params, extending defaults:
+	  opts = objectAssign({}, settings, opts);
+
+	  // Check format (returns object with pos, neg and zero), only need pos for now:
+	  var formats = _checkCurrencyFormat(opts.format);
+
+	  // Whether to pad at start of string or after currency symbol:
+	  var padAfterSymbol = formats.pos.indexOf('%s') < formats.pos.indexOf('%v');
+
+	  // Store value for the length of the longest string in the column:
+	  var maxLength = 0;
+
+	  // Format the list according to options, store the length of the longest string:
+	  var formatted = list.map(function (val) {
+	    if (Array.isArray(val)) {
+	      // Recursively format columns if list is a multi-dimensional array:
+	      return formatColumn(val, opts);
+	    }
+	    // Clean up the value
+	    val = unformat(val, opts.decimal);
+
+	    // Choose which format to use for this value (pos, neg or zero):
+	    var useFormat = undefined;
+
+	    if (val > 0) {
+	      useFormat = formats.pos;
+	    } else if (val < 0) {
+	      useFormat = formats.neg;
+	    } else {
+	      useFormat = formats.zero;
+	    }
+
+	    // Format this value, push into formatted list and save the length:
+	    var fVal = useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(val), opts));
+
+	    if (fVal.length > maxLength) {
+	      maxLength = fVal.length;
+	    }
+
+	    return fVal;
+	  });
+
+	  // Pad each number in the list and send back the column of numbers:
+	  return formatted.map(function (val) {
+	    // Only if this is a string (not a nested array, which would have already been padded):
+	    if (isString(val) && val.length < maxLength) {
+	      // Depending on symbol position, pad after symbol or at index 0:
+	      return padAfterSymbol ? val.replace(opts.symbol, opts.symbol + new Array(maxLength - val.length + 1).join(' ')) : new Array(maxLength - val.length + 1).join(' ') + val;
+	    }
+	    return val;
+	  });
+	}
+
+	exports.settings = settings;
+	exports.unformat = unformat;
+	exports.toFixed = toFixed;
+	exports.formatMoney = formatMoney;
+	exports.formatNumber = formatNumber;
+	exports.formatColumn = formatColumn;
+	exports.format = formatMoney;
+	exports.parse = unformat;
+
+}));
+//# sourceMappingURL=accounting.umd.js.map
+
+/***/ }),
 /* 50 */,
 /* 51 */,
 /* 52 */,
@@ -26098,7 +25770,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 109 */,
 /* 110 */,
 /* 111 */,
-/* 112 */
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -26696,7 +26373,7 @@ Abide.defaults = {
 
 
 /***/ }),
-/* 113 */
+/* 118 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27045,7 +26722,7 @@ function hyphenate(str) {
 
 
 /***/ }),
-/* 114 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27453,7 +27130,7 @@ Dropdown.defaults = {
 
 
 /***/ }),
-/* 115 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27785,7 +27462,7 @@ Equalizer.defaults = {
 
 
 /***/ }),
-/* 116 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28008,7 +27685,7 @@ Interchange.SPECIAL_QUERIES = {
 
 
 /***/ }),
-/* 117 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28278,7 +27955,7 @@ Magellan.defaults = {
 
 
 /***/ }),
-/* 118 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28839,7 +28516,7 @@ OffCanvas.defaults = {
 
 
 /***/ }),
-/* 119 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28852,7 +28529,7 @@ OffCanvas.defaults = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__foundation_util_imageLoader__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__foundation_util_core__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__foundation_plugin__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__foundation_util_touch__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__foundation_util_touch__ = __webpack_require__(13);
 
 
 
@@ -29387,7 +29064,7 @@ Orbit.defaults = {
 
 
 /***/ }),
-/* 120 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29645,7 +29322,7 @@ ResponsiveAccordionTabs.defaults = {};
 
 
 /***/ }),
-/* 121 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29816,7 +29493,7 @@ ResponsiveMenu.defaults = {};
 
 
 /***/ }),
-/* 122 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29985,7 +29662,7 @@ ResponsiveToggle.defaults = {
 
 
 /***/ }),
-/* 123 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30585,7 +30262,7 @@ function mobileSniff() {
 
 
 /***/ }),
-/* 124 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30596,7 +30273,7 @@ function mobileSniff() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__foundation_util_motion__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__foundation_util_core__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__foundation_plugin__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__foundation_util_touch__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__foundation_util_touch__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__foundation_util_triggers__ = __webpack_require__(6);
 
 
@@ -31313,7 +30990,7 @@ function baseLog(base, value) {
 
 
 /***/ }),
-/* 125 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31834,7 +31511,7 @@ function emCalc(em) {
 
 
 /***/ }),
-/* 126 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31997,7 +31674,7 @@ Toggler.defaults = {
 
 
 /***/ }),
-/* 127 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32473,11 +32150,6 @@ Tooltip.defaults = {
 
 
 /***/ }),
-/* 128 */,
-/* 129 */,
-/* 130 */,
-/* 131 */,
-/* 132 */,
 /* 133 */,
 /* 134 */,
 /* 135 */,
@@ -32528,429 +32200,12 @@ Tooltip.defaults = {
 /* 180 */,
 /* 181 */,
 /* 182 */,
-/* 183 */
-/***/ (function(module, exports, __webpack_require__) {
-
-(function (global, factory) {
-	 true ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.accounting = global.accounting || {})));
-}(this, function (exports) { 'use strict';
-
-	function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports), module.exports; }
-
-	/**
-	 * The library's settings configuration object.
-	 *
-	 * Contains default parameters for currency and number formatting
-	 */
-	var settings = {
-	  symbol: '$', // default currency symbol is '$'
-	  format: '%s%v', // controls output: %s = symbol, %v = value (can be object, see docs)
-	  decimal: '.', // decimal point separator
-	  thousand: ',', // thousands separator
-	  precision: 2, // decimal places
-	  grouping: 3, // digit grouping (not implemented yet)
-	  stripZeros: false, // strip insignificant zeros from decimal part
-	  fallback: 0 // value returned on unformat() failure
-	};
-
-	/**
-	 * Takes a string/array of strings, removes all formatting/cruft and returns the raw float value
-	 * Alias: `accounting.parse(string)`
-	 *
-	 * Decimal must be included in the regular expression to match floats (defaults to
-	 * accounting.settings.decimal), so if the number uses a non-standard decimal
-	 * separator, provide it as the second argument.
-	 *
-	 * Also matches bracketed negatives (eg. '$ (1.99)' => -1.99)
-	 *
-	 * Doesn't throw any errors (`NaN`s become 0) but this may change in future
-	 *
-	 * ```js
-	 *  accounting.unformat("£ 12,345,678.90 GBP"); // 12345678.9
-	 * ```
-	 *
-	 * @method unformat
-	 * @for accounting
-	 * @param {String|Array<String>} value The string or array of strings containing the number/s to parse.
-	 * @param {Number}               decimal Number of decimal digits of the resultant number
-	 * @return {Float} The parsed number
-	 */
-	function unformat(value) {
-	  var decimal = arguments.length <= 1 || arguments[1] === undefined ? settings.decimal : arguments[1];
-	  var fallback = arguments.length <= 2 || arguments[2] === undefined ? settings.fallback : arguments[2];
-
-	  // Recursively unformat arrays:
-	  if (Array.isArray(value)) {
-	    return value.map(function (val) {
-	      return unformat(val, decimal, fallback);
-	    });
-	  }
-
-	  // Return the value as-is if it's already a number:
-	  if (typeof value === 'number') return value;
-
-	  // Build regex to strip out everything except digits, decimal point and minus sign:
-	  var regex = new RegExp('[^0-9-(-)-' + decimal + ']', ['g']);
-	  var unformattedValueString = ('' + value).replace(regex, '') // strip out any cruft
-	  .replace(decimal, '.') // make sure decimal point is standard
-	  .replace(/\(([-]*\d*[^)]?\d+)\)/g, '-$1') // replace bracketed values with negatives
-	  .replace(/\((.*)\)/, ''); // remove any brackets that do not have numeric value
-
-	  /**
-	   * Handling -ve number and bracket, eg.
-	   * (-100) = 100, -(100) = 100, --100 = 100
-	   */
-	  var negative = (unformattedValueString.match(/-/g) || 2).length % 2,
-	      absUnformatted = parseFloat(unformattedValueString.replace(/-/g, '')),
-	      unformatted = absUnformatted * (negative ? -1 : 1);
-
-	  // This will fail silently which may cause trouble, let's wait and see:
-	  return !isNaN(unformatted) ? unformatted : fallback;
-	}
-
-	/**
-	 * Check and normalise the value of precision (must be positive integer)
-	 */
-	function _checkPrecision(val, base) {
-	  val = Math.round(Math.abs(val));
-	  return isNaN(val) ? base : val;
-	}
-
-	/**
-	 * Implementation of toFixed() that treats floats more like decimals
-	 *
-	 * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
-	 * problems for accounting- and finance-related software.
-	 *
-	 * ```js
-	 *  (0.615).toFixed(2);           // "0.61" (native toFixed has rounding issues)
-	 *  accounting.toFixed(0.615, 2); // "0.62"
-	 * ```
-	 *
-	 * @method toFixed
-	 * @for accounting
-	 * @param {Float}   value         The float to be treated as a decimal number.
-	 * @param {Number} [precision=2] The number of decimal digits to keep.
-	 * @return {String} The given number transformed into a string with the given precission
-	 */
-	function toFixed(value, precision) {
-	  precision = _checkPrecision(precision, settings.precision);
-	  var power = Math.pow(10, precision);
-
-	  // Multiply up by precision, round accurately, then divide and use native toFixed():
-	  return (Math.round((value + 1e-8) * power) / power).toFixed(precision);
-	}
-
-	var index = __commonjs(function (module) {
-	/* eslint-disable no-unused-vars */
-	'use strict';
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
-	});
-
-	var objectAssign = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
-
-	function _stripInsignificantZeros(str, decimal) {
-	  var parts = str.split(decimal);
-	  var integerPart = parts[0];
-	  var decimalPart = parts[1].replace(/0+$/, '');
-
-	  if (decimalPart.length > 0) {
-	    return integerPart + decimal + decimalPart;
-	  }
-
-	  return integerPart;
-	}
-
-	/**
-	 * Format a number, with comma-separated thousands and custom precision/decimal places
-	 * Alias: `accounting.format()`
-	 *
-	 * Localise by overriding the precision and thousand / decimal separators
-	 *
-	 * ```js
-	 * accounting.formatNumber(5318008);              // 5,318,008
-	 * accounting.formatNumber(9876543.21, { precision: 3, thousand: " " }); // 9 876 543.210
-	 * ```
-	 *
-	 * @method formatNumber
-	 * @for accounting
-	 * @param {Number}        number The number to be formatted.
-	 * @param {Object}        [opts={}] Object containing all the options of the method.
-	 * @return {String} The given number properly formatted.
-	  */
-	function formatNumber(number) {
-	  var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	  // Resursively format arrays:
-	  if (Array.isArray(number)) {
-	    return number.map(function (val) {
-	      return formatNumber(val, opts);
-	    });
-	  }
-
-	  // Build options object from second param (if object) or all params, extending defaults:
-	  opts = objectAssign({}, settings, opts);
-
-	  // Do some calc:
-	  var negative = number < 0 ? '-' : '';
-	  var base = parseInt(toFixed(Math.abs(number), opts.precision), 10) + '';
-	  var mod = base.length > 3 ? base.length % 3 : 0;
-
-	  // Format the number:
-	  var formatted = negative + (mod ? base.substr(0, mod) + opts.thousand : '') + base.substr(mod).replace(/(\d{3})(?=\d)/g, '$1' + opts.thousand) + (opts.precision > 0 ? opts.decimal + toFixed(Math.abs(number), opts.precision).split('.')[1] : '');
-
-	  return opts.stripZeros ? _stripInsignificantZeros(formatted, opts.decimal) : formatted;
-	}
-
-	var index$1 = __commonjs(function (module) {
-	'use strict';
-
-	var strValue = String.prototype.valueOf;
-	var tryStringObject = function tryStringObject(value) {
-		try {
-			strValue.call(value);
-			return true;
-		} catch (e) {
-			return false;
-		}
-	};
-	var toStr = Object.prototype.toString;
-	var strClass = '[object String]';
-	var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
-
-	module.exports = function isString(value) {
-		if (typeof value === 'string') { return true; }
-		if (typeof value !== 'object') { return false; }
-		return hasToStringTag ? tryStringObject(value) : toStr.call(value) === strClass;
-	};
-	});
-
-	var isString = (index$1 && typeof index$1 === 'object' && 'default' in index$1 ? index$1['default'] : index$1);
-
-	/**
-	 * Parses a format string or object and returns format obj for use in rendering
-	 *
-	 * `format` is either a string with the default (positive) format, or object
-	 * containing `pos` (required), `neg` and `zero` values
-	 *
-	 * Either string or format.pos must contain "%v" (value) to be valid
-	 *
-	 * @method _checkCurrencyFormat
-	 * @for accounting
-	 * @param {String}        [format="%s%v"] String with the format to apply, where %s is the currency symbol and %v is the value.
-	 * @return {Object} object represnting format (with pos, neg and zero attributes)
-	 */
-	function _checkCurrencyFormat(format) {
-	  // Format should be a string, in which case `value` ('%v') must be present:
-	  if (isString(format) && format.match('%v')) {
-	    // Create and return positive, negative and zero formats:
-	    return {
-	      pos: format,
-	      neg: format.replace('-', '').replace('%v', '-%v'),
-	      zero: format
-	    };
-	  }
-
-	  // Otherwise, assume format was fine:
-	  return format;
-	}
-
-	/**
-	 * Format a number into currency
-	 *
-	 * Usage: accounting.formatMoney(number, symbol, precision, thousandsSep, decimalSep, format)
-	 * defaults: (0, '$', 2, ',', '.', '%s%v')
-	 *
-	 * Localise by overriding the symbol, precision, thousand / decimal separators and format
-	 *
-	 * ```js
-	 * // Default usage:
-	 * accounting.formatMoney(12345678); // $12,345,678.00
-	 *
-	 * // European formatting (custom symbol and separators), can also use options object as second parameter:
-	 * accounting.formatMoney(4999.99, { symbol: "€", precision: 2, thousand: ".", decimal: "," }); // €4.999,99
-	 *
-	 * // Negative values can be formatted nicely:
-	 * accounting.formatMoney(-500000, { symbol: "£ ", precision: 0 }); // £ -500,000
-	 *
-	 * // Simple `format` string allows control of symbol position (%v = value, %s = symbol):
-	 * accounting.formatMoney(5318008, { symbol: "GBP",  format: "%v %s" }); // 5,318,008.00 GBP
-	 * ```
-	 *
-	 * @method formatMoney
-	 * @for accounting
-	 * @param {Number}        number Number to be formatted.
-	 * @param {Object}        [opts={}] Object containing all the options of the method.
-	 * @return {String} The given number properly formatted as money.
-	 */
-	function formatMoney(number) {
-	  var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	  // Resursively format arrays:
-	  if (Array.isArray(number)) {
-	    return number.map(function (val) {
-	      return formatMoney(val, opts);
-	    });
-	  }
-
-	  // Build options object from second param (if object) or all params, extending defaults:
-	  opts = objectAssign({}, settings, opts);
-
-	  // Check format (returns object with pos, neg and zero):
-	  var formats = _checkCurrencyFormat(opts.format);
-
-	  // Choose which format to use for this value:
-	  var useFormat = undefined;
-
-	  if (number > 0) {
-	    useFormat = formats.pos;
-	  } else if (number < 0) {
-	    useFormat = formats.neg;
-	  } else {
-	    useFormat = formats.zero;
-	  }
-
-	  // Return with currency symbol added:
-	  return useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(number), opts));
-	}
-
-	/**
-	 * Format a list of numbers into an accounting column, padding with whitespace
-	 * to line up currency symbols, thousand separators and decimals places
-	 *
-	 * List should be an array of numbers
-	 *
-	 * Returns array of accouting-formatted number strings of same length
-	 *
-	 * NB: `white-space:pre` CSS rule is required on the list container to prevent
-	 * browsers from collapsing the whitespace in the output strings.
-	 *
-	 * ```js
-	 * accounting.formatColumn([123.5, 3456.49, 777888.99, 12345678, -5432], { symbol: "$ " });
-	 * ```
-	 *
-	 * @method formatColumn
-	 * @for accounting
-	 * @param {Array<Number>} list An array of numbers to format
-	 * @param {Object}        [opts={}] Object containing all the options of the method.
-	 * @param {Object|String} [symbol="$"] String with the currency symbol. For conveniency if can be an object containing all the options of the method.
-	 * @param {Integer}       [precision=2] Number of decimal digits
-	 * @param {String}        [thousand=','] String with the thousands separator.
-	 * @param {String}        [decimal="."] String with the decimal separator.
-	 * @param {String}        [format="%s%v"] String with the format to apply, where %s is the currency symbol and %v is the value.
-	 * @return {Array<String>} array of accouting-formatted number strings of same length
-	 */
-	function formatColumn(list) {
-	  var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	  if (!list) return [];
-
-	  // Build options object from second param (if object) or all params, extending defaults:
-	  opts = objectAssign({}, settings, opts);
-
-	  // Check format (returns object with pos, neg and zero), only need pos for now:
-	  var formats = _checkCurrencyFormat(opts.format);
-
-	  // Whether to pad at start of string or after currency symbol:
-	  var padAfterSymbol = formats.pos.indexOf('%s') < formats.pos.indexOf('%v');
-
-	  // Store value for the length of the longest string in the column:
-	  var maxLength = 0;
-
-	  // Format the list according to options, store the length of the longest string:
-	  var formatted = list.map(function (val) {
-	    if (Array.isArray(val)) {
-	      // Recursively format columns if list is a multi-dimensional array:
-	      return formatColumn(val, opts);
-	    }
-	    // Clean up the value
-	    val = unformat(val, opts.decimal);
-
-	    // Choose which format to use for this value (pos, neg or zero):
-	    var useFormat = undefined;
-
-	    if (val > 0) {
-	      useFormat = formats.pos;
-	    } else if (val < 0) {
-	      useFormat = formats.neg;
-	    } else {
-	      useFormat = formats.zero;
-	    }
-
-	    // Format this value, push into formatted list and save the length:
-	    var fVal = useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(val), opts));
-
-	    if (fVal.length > maxLength) {
-	      maxLength = fVal.length;
-	    }
-
-	    return fVal;
-	  });
-
-	  // Pad each number in the list and send back the column of numbers:
-	  return formatted.map(function (val) {
-	    // Only if this is a string (not a nested array, which would have already been padded):
-	    if (isString(val) && val.length < maxLength) {
-	      // Depending on symbol position, pad after symbol or at index 0:
-	      return padAfterSymbol ? val.replace(opts.symbol, opts.symbol + new Array(maxLength - val.length + 1).join(' ')) : new Array(maxLength - val.length + 1).join(' ') + val;
-	    }
-	    return val;
-	  });
-	}
-
-	exports.settings = settings;
-	exports.unformat = unformat;
-	exports.toFixed = toFixed;
-	exports.formatMoney = formatMoney;
-	exports.formatNumber = formatNumber;
-	exports.formatColumn = formatColumn;
-	exports.format = formatMoney;
-	exports.parse = unformat;
-
-}));
-//# sourceMappingURL=accounting.umd.js.map
-
-/***/ }),
+/* 183 */,
 /* 184 */,
-/* 185 */
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35462,7 +34717,7 @@ if (inBrowser && window.Vue) {
 
 
 /***/ }),
-/* 186 */
+/* 189 */
 /***/ (function(module, exports) {
 
 /**
@@ -35495,7 +34750,820 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 187 */
+/* 190 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Store */
+/* unused harmony export mapState */
+/* unused harmony export mapMutations */
+/* unused harmony export mapGetters */
+/* unused harmony export mapActions */
+/**
+ * vuex v2.3.0
+ * (c) 2017 Evan You
+ * @license MIT
+ */
+var applyMixin = function (Vue) {
+  var version = Number(Vue.version.split('.')[0]);
+
+  if (version >= 2) {
+    var usesInit = Vue.config._lifecycleHooks.indexOf('init') > -1;
+    Vue.mixin(usesInit ? { init: vuexInit } : { beforeCreate: vuexInit });
+  } else {
+    // override init and inject vuex init procedure
+    // for 1.x backwards compatibility.
+    var _init = Vue.prototype._init;
+    Vue.prototype._init = function (options) {
+      if ( options === void 0 ) options = {};
+
+      options.init = options.init
+        ? [vuexInit].concat(options.init)
+        : vuexInit;
+      _init.call(this, options);
+    };
+  }
+
+  /**
+   * Vuex init hook, injected into each instances init hooks list.
+   */
+
+  function vuexInit () {
+    var options = this.$options;
+    // store injection
+    if (options.store) {
+      this.$store = options.store;
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store;
+    }
+  }
+};
+
+var devtoolHook =
+  typeof window !== 'undefined' &&
+  window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+function devtoolPlugin (store) {
+  if (!devtoolHook) { return }
+
+  store._devtoolHook = devtoolHook;
+
+  devtoolHook.emit('vuex:init', store);
+
+  devtoolHook.on('vuex:travel-to-state', function (targetState) {
+    store.replaceState(targetState);
+  });
+
+  store.subscribe(function (mutation, state) {
+    devtoolHook.emit('vuex:mutation', mutation, state);
+  });
+}
+
+/**
+ * Get the first item that pass the test
+ * by second argument function
+ *
+ * @param {Array} list
+ * @param {Function} f
+ * @return {*}
+ */
+/**
+ * Deep copy the given object considering circular structure.
+ * This function caches all nested objects and its copies.
+ * If it detects circular structure, use cached copy to avoid infinite loop.
+ *
+ * @param {*} obj
+ * @param {Array<Object>} cache
+ * @return {*}
+ */
+
+
+/**
+ * forEach for object
+ */
+function forEachValue (obj, fn) {
+  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
+}
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function assert (condition, msg) {
+  if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+var Module = function Module (rawModule, runtime) {
+  this.runtime = runtime;
+  this._children = Object.create(null);
+  this._rawModule = rawModule;
+  var rawState = rawModule.state;
+  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
+};
+
+var prototypeAccessors$1 = { namespaced: {} };
+
+prototypeAccessors$1.namespaced.get = function () {
+  return !!this._rawModule.namespaced
+};
+
+Module.prototype.addChild = function addChild (key, module) {
+  this._children[key] = module;
+};
+
+Module.prototype.removeChild = function removeChild (key) {
+  delete this._children[key];
+};
+
+Module.prototype.getChild = function getChild (key) {
+  return this._children[key]
+};
+
+Module.prototype.update = function update (rawModule) {
+  this._rawModule.namespaced = rawModule.namespaced;
+  if (rawModule.actions) {
+    this._rawModule.actions = rawModule.actions;
+  }
+  if (rawModule.mutations) {
+    this._rawModule.mutations = rawModule.mutations;
+  }
+  if (rawModule.getters) {
+    this._rawModule.getters = rawModule.getters;
+  }
+};
+
+Module.prototype.forEachChild = function forEachChild (fn) {
+  forEachValue(this._children, fn);
+};
+
+Module.prototype.forEachGetter = function forEachGetter (fn) {
+  if (this._rawModule.getters) {
+    forEachValue(this._rawModule.getters, fn);
+  }
+};
+
+Module.prototype.forEachAction = function forEachAction (fn) {
+  if (this._rawModule.actions) {
+    forEachValue(this._rawModule.actions, fn);
+  }
+};
+
+Module.prototype.forEachMutation = function forEachMutation (fn) {
+  if (this._rawModule.mutations) {
+    forEachValue(this._rawModule.mutations, fn);
+  }
+};
+
+Object.defineProperties( Module.prototype, prototypeAccessors$1 );
+
+var ModuleCollection = function ModuleCollection (rawRootModule) {
+  var this$1 = this;
+
+  // register root module (Vuex.Store options)
+  this.root = new Module(rawRootModule, false);
+
+  // register all nested modules
+  if (rawRootModule.modules) {
+    forEachValue(rawRootModule.modules, function (rawModule, key) {
+      this$1.register([key], rawModule, false);
+    });
+  }
+};
+
+ModuleCollection.prototype.get = function get (path) {
+  return path.reduce(function (module, key) {
+    return module.getChild(key)
+  }, this.root)
+};
+
+ModuleCollection.prototype.getNamespace = function getNamespace (path) {
+  var module = this.root;
+  return path.reduce(function (namespace, key) {
+    module = module.getChild(key);
+    return namespace + (module.namespaced ? key + '/' : '')
+  }, '')
+};
+
+ModuleCollection.prototype.update = function update$1 (rawRootModule) {
+  update(this.root, rawRootModule);
+};
+
+ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
+    var this$1 = this;
+    if ( runtime === void 0 ) runtime = true;
+
+  var parent = this.get(path.slice(0, -1));
+  var newModule = new Module(rawModule, runtime);
+  parent.addChild(path[path.length - 1], newModule);
+
+  // register nested modules
+  if (rawModule.modules) {
+    forEachValue(rawModule.modules, function (rawChildModule, key) {
+      this$1.register(path.concat(key), rawChildModule, runtime);
+    });
+  }
+};
+
+ModuleCollection.prototype.unregister = function unregister (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+  if (!parent.getChild(key).runtime) { return }
+
+  parent.removeChild(key);
+};
+
+function update (targetModule, newModule) {
+  // update target module
+  targetModule.update(newModule);
+
+  // update nested modules
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!targetModule.getChild(key)) {
+        console.warn(
+          "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
+          'manual reload is needed'
+        );
+        return
+      }
+      update(targetModule.getChild(key), newModule.modules[key]);
+    }
+  }
+}
+
+var Vue; // bind on install
+
+var Store = function Store (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
+  assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
+
+  var state = options.state; if ( state === void 0 ) state = {};
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+
+  // store internal state
+  this._committing = false;
+  this._actions = Object.create(null);
+  this._mutations = Object.create(null);
+  this._wrappedGetters = Object.create(null);
+  this._modules = new ModuleCollection(options);
+  this._modulesNamespaceMap = Object.create(null);
+  this._subscribers = [];
+  this._watcherVM = new Vue();
+
+  // bind commit and dispatch to self
+  var store = this;
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+  };
+  this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  };
+
+  // strict mode
+  this.strict = strict;
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], this._modules.root);
+
+  // initialize the store vm, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreVM(this, state);
+
+  // apply plugins
+  plugins.concat(devtoolPlugin).forEach(function (plugin) { return plugin(this$1); });
+};
+
+var prototypeAccessors = { state: {} };
+
+prototypeAccessors.state.get = function () {
+  return this._vm._data.$$state
+};
+
+prototypeAccessors.state.set = function (v) {
+  assert(false, "Use store.replaceState() to explicit replace store state.");
+};
+
+Store.prototype.commit = function commit (_type, _payload, _options) {
+    var this$1 = this;
+
+  // check object-style commit
+  var ref = unifyObjectStyle(_type, _payload, _options);
+    var type = ref.type;
+    var payload = ref.payload;
+    var options = ref.options;
+
+  var mutation = { type: type, payload: payload };
+  var entry = this._mutations[type];
+  if (!entry) {
+    console.error(("[vuex] unknown mutation type: " + type));
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload);
+    });
+  });
+  this._subscribers.forEach(function (sub) { return sub(mutation, this$1.state); });
+
+  if (options && options.silent) {
+    console.warn(
+      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
+      'Use the filter functionality in the vue-devtools'
+    );
+  }
+};
+
+Store.prototype.dispatch = function dispatch (_type, _payload) {
+  // check object-style dispatch
+  var ref = unifyObjectStyle(_type, _payload);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var entry = this._actions[type];
+  if (!entry) {
+    console.error(("[vuex] unknown action type: " + type));
+    return
+  }
+  return entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload)
+};
+
+Store.prototype.subscribe = function subscribe (fn) {
+  var subs = this._subscribers;
+  if (subs.indexOf(fn) < 0) {
+    subs.push(fn);
+  }
+  return function () {
+    var i = subs.indexOf(fn);
+    if (i > -1) {
+      subs.splice(i, 1);
+    }
+  }
+};
+
+Store.prototype.watch = function watch (getter, cb, options) {
+    var this$1 = this;
+
+  assert(typeof getter === 'function', "store.watch only accepts a function.");
+  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1 = this;
+
+  this._withCommit(function () {
+    this$1._vm._data.$$state = state;
+  });
+};
+
+Store.prototype.registerModule = function registerModule (path, rawModule) {
+  if (typeof path === 'string') { path = [path]; }
+  assert(Array.isArray(path), "module path must be a string or an Array.");
+  this._modules.register(path, rawModule);
+  installModule(this, this.state, path, this._modules.get(path));
+  // reset store to update getters...
+  resetStoreVM(this, this.state);
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1 = this;
+
+  if (typeof path === 'string') { path = [path]; }
+  assert(Array.isArray(path), "module path must be a string or an Array.");
+  this._modules.unregister(path);
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1.state, path.slice(0, -1));
+    Vue.delete(parentState, path[path.length - 1]);
+  });
+  resetStore(this);
+};
+
+Store.prototype.hotUpdate = function hotUpdate (newOptions) {
+  this._modules.update(newOptions);
+  resetStore(this, true);
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing;
+  this._committing = true;
+  fn();
+  this._committing = committing;
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors );
+
+function resetStore (store, hot) {
+  store._actions = Object.create(null);
+  store._mutations = Object.create(null);
+  store._wrappedGetters = Object.create(null);
+  store._modulesNamespaceMap = Object.create(null);
+  var state = store.state;
+  // init all modules
+  installModule(store, state, [], store._modules.root, true);
+  // reset vm
+  resetStoreVM(store, state, hot);
+}
+
+function resetStoreVM (store, state, hot) {
+  var oldVm = store._vm;
+
+  // bind store public getters
+  store.getters = {};
+  var wrappedGetters = store._wrappedGetters;
+  var computed = {};
+  forEachValue(wrappedGetters, function (fn, key) {
+    // use computed to leverage its lazy-caching mechanism
+    computed[key] = function () { return fn(store); };
+    Object.defineProperty(store.getters, key, {
+      get: function () { return store._vm[key]; },
+      enumerable: true // for local getters
+    });
+  });
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  var silent = Vue.config.silent;
+  Vue.config.silent = true;
+  store._vm = new Vue({
+    data: {
+      $$state: state
+    },
+    computed: computed
+  });
+  Vue.config.silent = silent;
+
+  // enable strict mode for new vm
+  if (store.strict) {
+    enableStrictMode(store);
+  }
+
+  if (oldVm) {
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(function () {
+        oldVm._data.$$state = null;
+      });
+    }
+    Vue.nextTick(function () { return oldVm.$destroy(); });
+  }
+}
+
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length;
+  var namespace = store._modules.getNamespace(path);
+
+  // register in namespace map
+  if (module.namespaced) {
+    store._modulesNamespaceMap[namespace] = module;
+  }
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1));
+    var moduleName = path[path.length - 1];
+    store._withCommit(function () {
+      Vue.set(parentState, moduleName, module.state);
+    });
+  }
+
+  var local = module.context = makeLocalContext(store, namespace, path);
+
+  module.forEachMutation(function (mutation, key) {
+    var namespacedType = namespace + key;
+    registerMutation(store, namespacedType, mutation, local);
+  });
+
+  module.forEachAction(function (action, key) {
+    var namespacedType = namespace + key;
+    registerAction(store, namespacedType, action, local);
+  });
+
+  module.forEachGetter(function (getter, key) {
+    var namespacedType = namespace + key;
+    registerGetter(store, namespacedType, getter, local);
+  });
+
+  module.forEachChild(function (child, key) {
+    installModule(store, rootState, path.concat(key), child, hot);
+  });
+}
+
+/**
+ * make localized dispatch, commit, getters and state
+ * if there is no namespace, just use root ones
+ */
+function makeLocalContext (store, namespace, path) {
+  var noNamespace = namespace === '';
+
+  var local = {
+    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (!store._actions[type]) {
+          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      return store.dispatch(type, payload)
+    },
+
+    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (!store._mutations[type]) {
+          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      store.commit(type, payload, options);
+    }
+  };
+
+  // getters and state object must be gotten lazily
+  // because they will be changed by vm update
+  Object.defineProperties(local, {
+    getters: {
+      get: noNamespace
+        ? function () { return store.getters; }
+        : function () { return makeLocalGetters(store, namespace); }
+    },
+    state: {
+      get: function () { return getNestedState(store.state, path); }
+    }
+  });
+
+  return local
+}
+
+function makeLocalGetters (store, namespace) {
+  var gettersProxy = {};
+
+  var splitPos = namespace.length;
+  Object.keys(store.getters).forEach(function (type) {
+    // skip if the target getter is not match this namespace
+    if (type.slice(0, splitPos) !== namespace) { return }
+
+    // extract local getter type
+    var localType = type.slice(splitPos);
+
+    // Add a port to the getters proxy.
+    // Define as getter property because
+    // we do not want to evaluate the getters in this time.
+    Object.defineProperty(gettersProxy, localType, {
+      get: function () { return store.getters[type]; },
+      enumerable: true
+    });
+  });
+
+  return gettersProxy
+}
+
+function registerMutation (store, type, handler, local) {
+  var entry = store._mutations[type] || (store._mutations[type] = []);
+  entry.push(function wrappedMutationHandler (payload) {
+    handler(local.state, payload);
+  });
+}
+
+function registerAction (store, type, handler, local) {
+  var entry = store._actions[type] || (store._actions[type] = []);
+  entry.push(function wrappedActionHandler (payload, cb) {
+    var res = handler({
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload, cb);
+    if (!isPromise(res)) {
+      res = Promise.resolve(res);
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err);
+        throw err
+      })
+    } else {
+      return res
+    }
+  });
+}
+
+function registerGetter (store, type, rawGetter, local) {
+  if (store._wrappedGetters[type]) {
+    console.error(("[vuex] duplicate getter key: " + type));
+    return
+  }
+  store._wrappedGetters[type] = function wrappedGetter (store) {
+    return rawGetter(
+      local.state, // local state
+      local.getters, // local getters
+      store.state, // root state
+      store.getters // root getters
+    )
+  };
+}
+
+function enableStrictMode (store) {
+  store._vm.$watch(function () { return this._data.$$state }, function () {
+    assert(store._committing, "Do not mutate vuex store state outside mutation handlers.");
+  }, { deep: true, sync: true });
+}
+
+function getNestedState (state, path) {
+  return path.length
+    ? path.reduce(function (state, key) { return state[key]; }, state)
+    : state
+}
+
+function unifyObjectStyle (type, payload, options) {
+  if (isObject(type) && type.type) {
+    options = payload;
+    payload = type;
+    type = type.type;
+  }
+
+  assert(typeof type === 'string', ("Expects string as the type, but found " + (typeof type) + "."));
+
+  return { type: type, payload: payload, options: options }
+}
+
+function install (_Vue) {
+  if (Vue) {
+    console.error(
+      '[vuex] already installed. Vue.use(Vuex) should be called only once.'
+    );
+    return
+  }
+  Vue = _Vue;
+  applyMixin(Vue);
+}
+
+// auto install in dist mode
+if (typeof window !== 'undefined' && window.Vue) {
+  install(window.Vue);
+}
+
+var mapState = normalizeNamespace(function (namespace, states) {
+  var res = {};
+  normalizeMap(states).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedState () {
+      var state = this.$store.state;
+      var getters = this.$store.getters;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
+        if (!module) {
+          return
+        }
+        state = module.context.state;
+        getters = module.context.getters;
+      }
+      return typeof val === 'function'
+        ? val.call(this, state, getters)
+        : state[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+var mapMutations = normalizeNamespace(function (namespace, mutations) {
+  var res = {};
+  normalizeMap(mutations).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    val = namespace + val;
+    res[key] = function mappedMutation () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      if (namespace && !getModuleByNamespace(this.$store, 'mapMutations', namespace)) {
+        return
+      }
+      return this.$store.commit.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+var mapGetters = normalizeNamespace(function (namespace, getters) {
+  var res = {};
+  normalizeMap(getters).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    val = namespace + val;
+    res[key] = function mappedGetter () {
+      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
+        return
+      }
+      if (!(val in this.$store.getters)) {
+        console.error(("[vuex] unknown getter: " + val));
+        return
+      }
+      return this.$store.getters[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+var mapActions = normalizeNamespace(function (namespace, actions) {
+  var res = {};
+  normalizeMap(actions).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    val = namespace + val;
+    res[key] = function mappedAction () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      if (namespace && !getModuleByNamespace(this.$store, 'mapActions', namespace)) {
+        return
+      }
+      return this.$store.dispatch.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+function normalizeMap (map) {
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+function normalizeNamespace (fn) {
+  return function (namespace, map) {
+    if (typeof namespace !== 'string') {
+      map = namespace;
+      namespace = '';
+    } else if (namespace.charAt(namespace.length - 1) !== '/') {
+      namespace += '/';
+    }
+    return fn(namespace, map)
+  }
+}
+
+function getModuleByNamespace (store, helper, namespace) {
+  var module = store._modulesNamespaceMap[namespace];
+  if (!module) {
+    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
+  }
+  return module
+}
+
+var index_esm = {
+  Store: Store,
+  install: install,
+  version: '2.3.0',
+  mapState: mapState,
+  mapMutations: mapMutations,
+  mapGetters: mapGetters,
+  mapActions: mapActions
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (index_esm);
+
+
+/***/ }),
+/* 191 */
 /***/ (function(module, exports) {
 
 var g;
@@ -35522,7 +35590,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 188 */
+/* 192 */
 /***/ (function(module, exports) {
 
 /*
@@ -35604,7 +35672,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 189 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -35623,7 +35691,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(186)
+var listToStyles = __webpack_require__(189)
 
 /*
 type StyleObject = {
@@ -35826,3 +35894,4 @@ function applyToTag (styleElement, obj) {
 
 /***/ })
 ]);
+//# sourceMappingURL=vendor.87b502d4a17dd237b34f.js.map
